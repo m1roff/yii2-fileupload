@@ -1,0 +1,28 @@
+{
+  "name": "mirkhamidov/yii2-fileupload",
+  "version": "1.0.0",
+  "description": "An enhanced FileInput widget with Object relation",
+  "keywords": ["yii2", "yii2-fileupload", "mirkhamidov", "image", "fileupload"],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/mirkhamidov/yii2-fileupload/issues?state=open",
+    "source": "https://github.com/mirkhamidov/yii2-fileupload"
+  },
+  "authors": [
+    {
+      "name": "Jasur Mirkhamidov",
+      "email": "mirkhamidov.jasur@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "yiisoft/yii2": "^2.0.0",
+    "kartik-v/yii2-widget-fileinput": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "mirkhamidov\\fileupload\\": ""
+    }
+  }
+}
