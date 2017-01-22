@@ -1,0 +1,27 @@
+img {
+    max-width: 100%; /* This rule is very important, please do not ignore this! */
+}
+
+.modal.upload_custom {
+    outline: none;
+
+}
+
+.modal.upload_custom .modal-dialog {
+    width: 90%;
+    margin: 5% auto;
+    height: 90%;
+}
+
+.modal.upload_custom .modal-body {
+    height: 75vh;
+}
+
+.modal.upload_custom .modal-body img{
+    width: 100%;
+    height: 100%;
+}
+
+#uploaded-photos{
+
+}

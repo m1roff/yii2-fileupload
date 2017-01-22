@@ -23,6 +23,14 @@
  *          'allowEdit' => true,
  *      ])?>
  *
+ *  Чтобы работал превью-кроп
+ *      <?= CropperWidget::widget([
+ *          'modelClass' => 'News',
+ *          'model' => $model,
+ *          'attribute' => 'thumb',
+ *          'cropAspect' => '1 / 1',
+ *      ]) ?>
+ *
  *  В связываемой модели (через поведение):
  *      public function behaviors()
  *      {
@@ -81,6 +89,8 @@ class Module extends \yii\base\Module
     public $deleteFilesRoute = '/fileupload/default/delete';
 
     public $paramsFilesRoute = '/fileupload/default/params';
+
+    public $saveFilesRoute = '/fileupload/default/save';
 
     /**
      * @var string Выводится с помощью [[sprintf()]]
@@ -322,6 +332,7 @@ class Module extends \yii\base\Module
                     $model->addErrors($fileModel->firstErrors);
                 } else {
                     $result['file'] = $fileModel->getFileUrl();
+                    $result['id'] = $fileModel->id;
                 }
             } else {
                 $model->addErrors($file->error);

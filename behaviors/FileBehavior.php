@@ -196,31 +196,46 @@ class FileBehavior extends Behavior
     private function limitedUploads($attributeName, $entityId)
     {
         if (!empty($this->attributesName[$attributeName]['rules']['maxFiles'])) {
-            $_need = File::find()
+            $_maxFiles = $this->attributesName[$attributeName]['rules']['maxFiles'];
+            $existsCount = (int)File::find()
                 ->where([
                     'entity' => $this->getOwnerShortClassName(),
                     'entity_attribute' => $attributeName,
                     'entity_id' => $entityId,
-                ])
-                ->limit(1)
-                ->scalar();
-            if ($_need) {
-                $query = Yii::$app->db->createCommand();
-                $query->update(
-                    File::tableName(),
-                    [
-                        'is_deleted' => true,
-                    ],
-                    'entity=:entityName AND entity_attribute=:entityAttributeName AND entity_id=:entity_id AND id != :NOTNEED',
-                    [
-                        ':entityName' => $this->getOwnerShortClassName(),
-                        ':entityAttributeName' => $attributeName,
-                        ':entity_id' => $entityId,
-                        ':NOTNEED' => $_need,
-                    ]
-                );
+                    'is_deleted' => false,
+                ])->count();
 
-                return (bool)$query->execute();
+            if ($_maxFiles < $existsCount) {
+                $_diff = $existsCount - $_maxFiles;
+                $_need = File::find()
+                    ->select('id')
+                    ->where([
+                        'entity' => $this->getOwnerShortClassName(),
+                        'entity_attribute' => $attributeName,
+                        'entity_id' => $entityId,
+                    ])
+                    ->orderBy(['created_at' => SORT_DESC])
+                    ->limit($_diff)
+                    ->column();
+
+                if ($_need) {
+                    $query = Yii::$app->db->createCommand();
+                    $query->update(
+                        File::tableName(),
+                        [
+                            'is_deleted' => true,
+                        ],
+                        'entity=:entityName AND entity_attribute=:entityAttributeName AND entity_id=:entity_id AND id NOT IN (:NOTNEED)',
+                        [
+                            ':entityName' => $this->getOwnerShortClassName(),
+                            ':entityAttributeName' => $attributeName,
+                            ':entity_id' => $entityId,
+                            ':NOTNEED' => implode(',',$_need),
+                        ]
+                    );
+
+                    return (bool)$query->execute();
+                }
             }
 
             return true;
