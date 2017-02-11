@@ -100,11 +100,14 @@ CropperWidgetAssets::register($this);
 
 
 <?php
-$this->registerJs('var aspect = ' . $aspect);
-$this->registerJs('var modelClass = "' . $modelClass . '"');
-$this->registerJs('var attribute = "' . $attribute . '"');
-$this->registerJs('var showPreview = "' . $showPreview . '"');
-$this->registerJs('var uploadCallback = ' . $uploadCallback ? $uploadCallback : 'false');
+$this->registerJs('var aspect = false;');
+if (!empty($aspect)) {
+    $this->registerJs('aspect = ' . $aspect . ';');
+}
+$this->registerJs('var modelClass = "' . $modelClass . '";');
+$this->registerJs('var attribute = "' . $attribute . '";');
+$this->registerJs('var showPreview = "' . $showPreview . '";');
+$this->registerJs('var uploadCallback = ' . ($uploadCallback ? $uploadCallback : 'false') . ';');
 $js = <<<'JS'
 
  function handleFileSelect(evt) {
