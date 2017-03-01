@@ -208,7 +208,12 @@ class Module extends \yii\base\Module
             for ($i = 0, $max = count($fileModel); $i < $max; ++$i) {
                 switch ($fileModel[$i]->getPreviewFileType()) {
                     case 'text':
-                        $result[] = iconv('windows-1251', 'utf-8', file_get_contents($fileModel[$i]->getRootPath()));
+                        try {
+                            $result[] = iconv('windows-1251', 'utf-8',
+                                file_get_contents($fileModel[$i]->getRootPath()));
+                        } catch (\Exception $e) {
+                            $result[] = $fileModel[$i]->getFileUrl();
+                        }
                         break;
 
                     default:
