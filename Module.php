@@ -208,11 +208,17 @@ class Module extends \yii\base\Module
             for ($i = 0, $max = count($fileModel); $i < $max; ++$i) {
                 switch ($fileModel[$i]->getPreviewFileType()) {
                     case 'text':
-                        try {
-                            $result[] = iconv('windows-1251', 'utf-8',
-                                file_get_contents($fileModel[$i]->getRootPath()));
-                        } catch (\Exception $e) {
-                            $result[] = $fileModel[$i]->getFileUrl();
+                        $content = file_get_contents($fileModel[$i]->getRootPath());
+                        $_fileEncoding = mb_detect_encoding($content);
+                        if (mb_detect_encoding($content) == 'UTF-8') {
+                            $result[] = $content;
+                        } else {
+                            try {
+                                $result[] = iconv($_fileEncoding, 'utf-8',
+                                    file_get_contents($fileModel[$i]->getRootPath()));
+                            } catch (\Exception $e) {
+                                $result[] = $fileModel[$i]->getFileUrl();
+                            }
                         }
                         break;
 
