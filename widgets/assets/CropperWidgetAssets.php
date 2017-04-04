@@ -15,7 +15,7 @@ class CropperWidgetAssets extends AssetBundle
 {
     public $depends = [
         CropperAssets::class,
-        UploadAsset::class,
         ClipboardAsset::class,
+        UploadAsset::class,
     ];
 }

@@ -6,13 +6,25 @@
 namespace mirkhamidov\fileupload\widgets;
 
 
+/**
+ * Class CropperWidget
+ * @package mirkhamidov\fileupload\widgets
+ *
+ *
+ * @property string $modalId
+ * @property string $cropperId
+ */
 class CropperWidget extends  \yii\base\Widget
 {
+    const CROP_ASPECT_16_9 = 16 / 9;
+    const CROP_ASPECT_4_3 = 4 / 3;
+    const CROP_ASPECT_1_1 = 1 / 1;
+    const CROP_ASPECT_2_3 = 2 / 3;
     /**
      * Пропорции кропа
-     * @var string|bool
+     * @var string|false
      */
-    public $cropAspect = '4 / 3';
+    public $cropAspect = self::CROP_ASPECT_4_3;
 
     /**
      * @var null
@@ -41,19 +53,26 @@ class CropperWidget extends  \yii\base\Widget
     public $uploadCallback = null;
 
     /**
+     * @var bool Вкл. копирование ссылки при клике на фото
+     */
+    public $onClickCopy = false;
+
+    /**
      *
      */
     public function run()
     {
-        return $this->render('cropper', [
-            'aspect' => $this->cropAspect,
-            'rotation' => $this->rotation,
-            'modelClass' => $this->modelClass,
-            'model' => $this->model,
-            'showButton' => $this->showButton,
-            'showPreview' => $this->showPreview,
-            'uploadCallback' => $this->uploadCallback,
-            'attribute' => $this->attribute,
-        ]);
+        return $this->render('cropper');
+    }
+
+    public function getModalId()
+    {
+        return $this->id . '-add-photo-modal';
+    }
+
+
+    public function getCropperId()
+    {
+        return 'cropper_' . $this->getId();
     }
 }
